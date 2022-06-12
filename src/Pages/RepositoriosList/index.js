@@ -9,24 +9,28 @@ import {
     responsiveFontSize
   } from "react-native-responsive-dimensions";
 
+  import {changeRepoPageToDetails} from './../../../actions'
+  import { connect } from "react-redux";
 
 
-export default props => {
 
-    const navigation = useNavigation()
+  const RepositoriesList = (props) =>{
+  const navigation = useNavigation()
 
-        return(
-            <TouchableOpacity style={{width:'97%',margin:4}}
-            onPress={() => navigation.navigate('Detalhes Repositorio',{data:props.data})}>
-                <View style={styles.card}>
-                    <View style={{flexDirection: 'row'}}>
-                    <Text style={{fontWeight:'bold',color:'#000',fontSize:responsiveFontSize(2),paddingLeft:5,width:responsiveWidth(40)}}>{props.data.name}</Text>
-                    <Text style={{fontStyle:'italic',color:'#000',fontSize:responsiveFontSize(1.4),paddingLeft:11,paddingTop:2,width:'50%'}}>{props.data.description}</Text>
-                    </View>
-                    <Text style={{fontSize:responsiveFontSize(1.6),paddingLeft:5,color:'#3a3b3c'}}>Open Issues: {props.data.open_issues.toString().toUpperCase()}</Text>
-                </View>
-            </TouchableOpacity>
-        )
+  return(
+    <TouchableOpacity style={{width:'97%',margin:4}}
+    onPress={
+      () => { props.dispatch(changeRepoPageToDetails(props.data)); navigation.navigate('Detalhes Repositorio'); }
+     }>
+        <View style={styles.card}>
+            <View style={{flexDirection: 'row'}}>
+            <Text style={{fontWeight:'bold',color:'#000',fontSize:responsiveFontSize(2),paddingLeft:5,width:responsiveWidth(40)}}>{props.data.name}</Text>
+            <Text style={{fontStyle:'italic',color:'#000',fontSize:responsiveFontSize(1.4),paddingLeft:11,paddingTop:2,width:'50%'}}>{props.data.description}</Text>
+            </View>
+            <Text style={{fontSize:responsiveFontSize(1.6),paddingLeft:5,color:'#3a3b3c'}}>Open Issues: {props.data.open_issues.toString().toUpperCase()}</Text>
+        </View>
+    </TouchableOpacity>
+)
 } 
 
 
@@ -44,4 +48,14 @@ const styles = StyleSheet.create({
       justifyContent:'center',
     }
   })
+
+
+  const mapStateToProps = (state) => {
+    const  repositories = { 
+      data: state.repositories,
+    }
+    return { repositories }
+  }
+  
+  export default connect(mapStateToProps)(RepositoriesList)
   

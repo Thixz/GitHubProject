@@ -18,14 +18,6 @@ import {initalState} from './../../../actions'
  class Home extends Component{
   constructor(props){
     super(props)
-    this.state = {
-      txtRepositorioDe:null,
-      txtQtdRepositorio:null,
-      repositorios:[],
-      isLoading:false,
-      ownerLogin:null,
-      ownerAvatarUrl:null,
-    }
     this.pesquisarUsuario = this.pesquisarUsuario.bind(this)
   }
 
