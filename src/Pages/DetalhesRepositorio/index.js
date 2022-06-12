@@ -10,8 +10,12 @@ import {
   responsiveFontSize
 } from "react-native-responsive-dimensions"
 
+import { connect } from "react-redux";
+import {isLoading} from './../../../actions'
+import {addIssues} from './../../../actions'
 
-export default class IssuesDetalhes extends Component{
+
+ class IssuesDetalhes extends Component{
     constructor(props){
         super(props)
         this.state = {
@@ -26,35 +30,15 @@ export default class IssuesDetalhes extends Component{
       }
 
       async componentDidMount(){
-        var repositoryData = this.props.route.params.data
         try {
-            if(repositoryData.open_issues == 0){
-alert('Não há issues abertas neste repositório!')
-    this.setState({
-        isLoading:false,
-        repositoryName:repositoryData.name,
-        repositoryDescription:repositoryData.description,
-        ownerLogin:repositoryData.owner.login,
-        ownerAvatarUrl:repositoryData.owner.avatar_url,
-        language:`Desenvolvido com : ${repositoryData.language || 'Não definido'}`,
-    })
-            }else{
-
-            }
-            const response = await api.get(`repos/${repositoryData.owner.login}/${repositoryData.name}/issues`)
-            let responseObject = response.data
+          this.props.dispatch(isLoading(true))
+            const response = await api.get(`repos/${this.props.repositories.data.ownerLogin}/${this.props.repositories.data.reposName}/issues`)
             setTimeout(() => {
-                this.setState({
-                    isLoading:false,
-                    repositoryName:repositoryData.name,
-                    repositoryDescription:repositoryData.description,
-                    ownerLogin:repositoryData.owner.login,
-                    ownerAvatarUrl:repositoryData.owner.avatar_url,
-                    language:`Desenvolvido com : ${repositoryData.language || 'Não definido'}`,
-                    issuesList:responseObject
-                })
+              this.props.dispatch(addIssues(response.data))
+              this.props.dispatch(isLoading(false))
             },1900)
         } catch (error) {
+          this.props.dispatch(isLoading(false))
             alert(error)
         }
     }
@@ -66,23 +50,23 @@ alert('Não há issues abertas neste repositório!')
                     <View style={{flexDirection:'row',height:'40%'}}>
                     <Image style={{width:'15%', height:'80%',margin:10,borderRadius:responsiveWidth(30)}} 
                 resizeMode="contain"
-                source={{uri:this.state.ownerAvatarUrl}}
+                source={{uri:this.props.repositories.data.ownerAvatarUrl}}
                 />
                 <Text style={{fontWeight:'bold',color:'black',fontSize:responsiveFontSize(1.5),paddingTop:30,width:'55%'}}>
-                    {this.state.ownerLogin}
+                    {this.props.repositories.data.ownerLogin}
                     </Text>
                     </View>
                 <Text style={{fontWeight:'bold',color:'black',fontSize:responsiveFontSize(3),paddingLeft:8,width:'100%'}}>
-                    {this.state.repositoryName}
+                {this.props.repositories.data.reposName}
                     </Text>
                     <Text style={{fontWeight:'bold',color:'black',fontSize:responsiveFontSize(1.5),paddingLeft:10,width:'55%',paddingTop:5}}>
-                    {this.state.language}
+                    {this.props.repositories.data.language}
                     </Text>
-                <Text style={{fontSize:responsiveFontSize(1.5),paddingLeft:10,paddingTop:5,color:'#3a3b3c'}}>{this.state.repositoryDescription}</Text>
+                <Text style={{fontSize:responsiveFontSize(1.5),paddingLeft:10,paddingTop:5,color:'#3a3b3c'}}>{this.props.repositories.data.description}</Text>
                 </View>
-                <Loader loading={this.state.isLoading} message='Carregando...'/>
+                <Loader loading={this.props.repositories.data.isLoading} message='Carregando...'/>
                 <FlatList style={{width:'100%',paddingLeft:4.5}}
-            data={this.state.issuesList}
+            data={this.props.issuesList.dataIssues.lista}
             keyExtractor={item => item.id.toString()}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => <IssuesList data={item}/>}
@@ -110,3 +94,16 @@ const styles = StyleSheet.create({
         margin:5,
       }
   })
+
+
+  const mapStateToProps = (state) => {
+    const  repositories = { 
+      data: state.repositories,
+    }
+    const  issuesList = { 
+      dataIssues: state.issuesList,
+    }
+    return { repositories,issuesList }
+  }
+  
+  export default connect(mapStateToProps)(IssuesDetalhes)

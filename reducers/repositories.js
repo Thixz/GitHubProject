@@ -2,15 +2,13 @@ const initialStateRepoPage ={
                 repositorios:[],
                 isLoading:false,
                 ownerLogin:'',
-                ownerAvatarUrl:null,
+                ownerAvatarUrl:'null',
                 txtRepositorioDe:'',
                 txtQtdRepositorio:''
 }
 
 const repositories = (state = [],action) => {
-    switch(action.type){
-        case 'REPOPAGE_ADD_REPOS':
-            console.log(action.data)
+        if(action.type == 'REPOPAGE_ADD_REPOS'){
             return{
                 ...state,
                 repositorios:action.data,
@@ -20,13 +18,33 @@ const repositories = (state = [],action) => {
                 txtRepositorioDe:`Repositórios de : ${action.data[0].owner.login}`,
                 txtQtdRepositorio:`Quantidade de Repositórios : ${action.data.length}`
             }
-            case 'REPOPAGE_IS_LOADING':
-            return { isLoading:action.data}
-            case 'REPOPAGE_INITIAL':
-                return initialStateRepoPage
-            default:
-                return initialStateRepoPage
+        }
+
+        if(action.type == 'REPOPAGE_IS_LOADING'){
+            return { ...state,
+                isLoading:action.data}
+        }
+
+        if(action.type == 'REPOPAGE_INITIAL'){
+            return initialStateRepoPage
+        }
+
+        if(action.type == 'CHANGE_REPOPAGE_TO_DETAILS'){
+            return {
+                ...state,
+                language:action.data.language,
+                description:action.data.description,
+                reposName:action.data.name
+            }
+        }
+
+        if(state.length == 0){
+            return initialStateRepoPage
+        }
+
+        else{
+            return state
+        }
     }
-}
 
 export default repositories
