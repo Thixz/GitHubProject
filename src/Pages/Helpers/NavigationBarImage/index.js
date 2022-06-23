@@ -12,11 +12,12 @@ const ActionBarImage = () => {
     <View style={{ flexDirection: 'row' }}>
       <Image
         style={{
-          width: responsiveWidth(20),
-          height: responsiveHeight(13),
+          width: responsiveWidth(18),
+          height: responsiveHeight(11),
           backgroundColor: '#d8d8d8',
+          marginRight:15
         }}
-        resizeMode="contain"
+        resizeMode="cover"
         source={require('../../../image/GitHub-Mark.png')}
       />
     </View>

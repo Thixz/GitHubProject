@@ -60,8 +60,8 @@ class IssuesDetalhes extends Component {
           <View style={{ flexDirection: 'row', height: '40%' }}>
             <Image
               style={{
-                width: '15%',
-                height: '80%',
+                width: responsiveWidth(13),
+                height: responsiveHeight(7),
                 margin: 10,
                 borderRadius: responsiveWidth(30),
               }}

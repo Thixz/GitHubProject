@@ -36,18 +36,24 @@ class Home extends Component {
     try {
       this.props.dispatch(isLoading(true));
       var response = await api.get(`users/${usuario.nativeEvent.text}/repos`);
-      setTimeout(() => {
-        this.props.dispatch(addRepos(response.data));
-        this.textInput.clear();
-      }, 1800);
+      if (response.data.length == 0) {
+        alert(
+          'O usuário não possui repositórios para exibição. Por favor, tente com outro usuário'
+        );
+        this.props.dispatch(isLoading(false));
+      } else {
+        setTimeout(() => {
+          this.props.dispatch(addRepos(response.data));
+          this.textInput.clear();
+        }, 1800);
+      }
     } catch (error) {
       setTimeout(() => {
         this.props.dispatch(initalState());
         this.textInput.clear();
-        if(error.response.status == 404)
-        alert('Não foi possível encontrar o usuário digitado.')
-        else
-        alert(`Erro interno ${error}`)
+        if (error.response.status == 404)
+          alert('Não foi possível encontrar o usuário digitado.');
+        else alert(`Erro interno ${error}`);
       }, 1800);
     }
   }
@@ -75,9 +81,8 @@ class Home extends Component {
           <View style={styles.infosUsuario}>
             <Image
               style={{
-                width: '20%',
-                height: '60%',
-                padding: 10,
+                width: responsiveWidth(16),
+                height: responsiveHeight(9.5),
                 borderRadius: responsiveWidth(10),
               }}
               resizeMode="contain"
@@ -85,7 +90,7 @@ class Home extends Component {
             />
             <Text
               style={{
-                padding: 10,
+                marginRight:25,
                 fontSize: responsiveFontSize(1.8),
                 fontWeight: 'bold',
                 color: '#000',

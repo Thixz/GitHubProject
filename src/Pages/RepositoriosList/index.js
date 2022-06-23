@@ -27,6 +27,7 @@ const RepositoriesList = (props) => {
     <TouchableOpacity
       style={{ width: '97%', margin: 4 }}
       onPress={() => {
+        console.log(props.data)
         props.dispatch(changeRepoPageToDetails(props.data));
         navigation.navigate('Detalhes Repositorio');
       }}
