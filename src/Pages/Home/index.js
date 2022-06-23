@@ -18,9 +18,9 @@ import {
 } from 'react-native-responsive-dimensions';
 
 import { connect } from 'react-redux';
-import { addRepos } from './../../../actions';
-import { isLoading } from './../../../actions';
-import { initalState } from './../../../actions';
+import { addRepos } from '../../actions/index';
+import { isLoading } from '../../actions/index';
+import { initalState } from '../../actions/index';
 
 class Home extends Component {
   constructor(props) {
@@ -29,6 +29,10 @@ class Home extends Component {
   }
 
   async pesquisarUsuario(usuario) {
+    if (usuario.nativeEvent.text.length == 0) {
+      alert('Por favor, digite um usuário para pesquisa');
+      return;
+    }
     try {
       this.props.dispatch(isLoading(true));
       var response = await api.get(`users/${usuario.nativeEvent.text}/repos`);
@@ -40,7 +44,10 @@ class Home extends Component {
       setTimeout(() => {
         this.props.dispatch(initalState());
         this.textInput.clear();
-        alert(error);
+        if(error.response.status == 404)
+        alert('Não foi possível encontrar o usuário digitado.')
+        else
+        alert(`Erro interno ${error}`)
       }, 1800);
     }
   }

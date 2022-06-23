@@ -17,7 +17,7 @@ import {
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
 
-import { changeRepoPageToDetails } from './../../../actions';
+import { changeRepoPageToDetails } from '../../actions/index';
 import { connect } from 'react-redux';
 
 const RepositoriesList = (props) => {

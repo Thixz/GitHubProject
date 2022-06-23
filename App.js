@@ -10,7 +10,7 @@ import ImageBar from './src/Pages/Helpers/NavigationBarImage';
 import MyWeb from './src/Pages/Helpers/WebView';
 
 import { Provider } from 'react-redux';
-import store from './store/';
+import store from './src/store/index';
 
 const Stack = createNativeStackNavigator();
 

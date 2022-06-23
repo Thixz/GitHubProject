@@ -19,8 +19,8 @@ import {
 } from 'react-native-responsive-dimensions';
 
 import { connect } from 'react-redux';
-import { isLoading } from './../../../actions';
-import { addIssues } from './../../../actions';
+import { isLoading } from '../../actions/index';
+import { addIssues } from '../../actions/index';
 
 class IssuesDetalhes extends Component {
   constructor(props) {
